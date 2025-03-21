@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html>
+
+    <head>
+        
+        <title>A Simple Webpage to Create EMI</title>
+
+      <style>
+      .invalid {
+       border: 1px solid red;
+      }
+      body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #85dcb8;
+}
+
+h1 {
+  text-align: center;
+  margin-top:50px;
+}
+
+form {
+  max-width:500px;
+  margin:0 auto;
+  display: flex;
+  flex-direction: column;
+  padding:20px;
+  border-radius:10px;
+  box-shadow:0px 0px 10px rgba(0,0,1,0);
+  align-items: center;
+  margin-top: 20px;
+}
+
+div {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+label {
+  width: 150px;
+  font-weight:bold;
+}
+
+input {
+  padding: 5px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+
+button {
+  padding: 5px;
+  border-radius: 5px;
+  background-color: #4CAF50;
+  color: white;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+button:hover {
+  background-color: #3e8e41;
+}
+
+.result {
+  text-align: center;
+  font-size: 24px;
+  margin-top: 20px;
+  color:#4CAF50
+  font-weight:bold;
+}
+th{
+width: 150px;
+  text-align: center;
+  border: 1px ;
+  padding: 10px;
+}
+td{
+text-align:center;}
+
+       </style>
+    </head>
+
+    <body>
+       <h1>A Simple Webpage to Create EMI</h1>
+    
+        <form>
+         <div>
+          <label for="username">Username:</label>
+            <input type="text" id="username" name="username">
+             </div>
+            
+           <div>
+            <label for="email">Email:</label>
+            <input type="text" id="email" name="email"></div>
+             
+                <div>
+                <label for="principle">Principle Amount:</label>
+                <input type="text" id="principle" name="principle" ></div>
+            
+            <div>
+            <label for="tenure">Tenure (in months):</label>
+            <input type="text" id="tenure" name="tenure"></div>
+            
+           <div>
+            <label for="interest">Interest Rate:</label>
+            <input type="text" id="interest" name="interest"></div>
+            
+            <input type="button" value="Calculate EMI" onclick="calculate()">
+           </form>
+    
+     <table id="calculationTable">
+      <tr>
+       <th>Username   </th>
+        <th>Email   </th>
+       <th>Principle Amount  </th>
+       <th>Tenure (months)  </th>
+       <th>Interest Rate  </th>
+       <th>EMI   </th>
+       
+      </tr>
+     </table>
+     <script>
+      function calculate() {
+    var username = document.getElementById("username");
+    var email = document.getElementById("email");
+    var principle = document.getElementById("principle");
+    var tenure = document.getElementById("tenure");
+    var interest = document.getElementById("interest");
+   
+    var usernameValid = /^[a-zA-Z0-9]+$/.test(username.value);
+    var emailValid = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(email.value);
+    var principleValid = /^[0-9]+\.?[0-9]*$/.test(principle.value);
+    var tenureValid = /^[0-9]+$/.test(tenure.value);
+    var interestValid = /^[0-9]+\.?[0-9]*$/.test(interest.value);
+
+     if (!usernameValid) {
+        username.classList.add("invalid");
+    } else {
+        username.classList.remove("invalid");
+    }
+    if (!emailValid) {
+        email.classList.add("invalid");
+    } else {
+        email.classList.remove("invalid");
+    }
+ 
+    if (!principleValid) {
+        principle.classList.add("invalid");
+    } else {
+        principle.classList.remove("invalid");
+    }
+    if (!tenureValid) {
+        tenure.classList.add("invalid");
+    } else {
+        tenure.classList.remove("invalid");
+    }
+    if (!interestValid) {
+        interest.classList.add("invalid");
+    } else {
+        interest.classList.remove("invalid");
+    }
+   
+    if ( usernameValid && emailValid && principleValid && tenureValid && interestValid ) {
+        var emi = calculateEMI(principle.value, tenure.value, interest.value);
+        var calculationTable = document.getElementById("calculationTable");
+        var rowCount = calculationTable.rows.length;
+        var row = calculationTable.insertRow(rowCount);
+        var usernameCell = row.insertCell(0);
+        var emailCell = row.insertCell(1);
+        var principleCell = row.insertCell(2);
+        var tenureCell = row.insertCell(3);
+        var interestCell = row.insertCell(4);
+        var emiCell = row.insertCell(4);
+        
+        usernameCell.innerHTML = username.value;
+        emailCell.innerHTML = email.value;
+        principleCell.innerHTML = principle.value;
+        tenureCell.innerHTML = tenure.value;
+        interestCell.innerHTML = interest.value;
+        emiCell.innerHTML = emi;
+        
+        
+        if (rowCount >= 11) {
+            calculationTable.deleteRow(rowCount - 1);
+        }
+    }
+}
+
+function calculateEMI(principle, tenure, interest) {
+    var p = parseFloat(principle);
+    var r = parseFloat(interest) / 1200;
+    var n = parseFloat(tenure) * 12;
+    var emi = (p * r * Math.pow(1 + r, n)) / (Math.pow(1 + r, n) - 1);
+    return emi.toFixed(2);
+}
+     </script>
+
+
+    </body>
+
+</html>
